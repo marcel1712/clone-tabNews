@@ -20,8 +20,6 @@ async function status(request, response) {
   const databaseOpenedConnectionValue =
     databaseOpenedConnectionResult.rows[0].count;
 
-  console.log(databaseOpenedConnectionValue);
-
   response.status(200).json({
     updated_at: updatedAt,
     dependencies: {
