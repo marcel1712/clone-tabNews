@@ -1,14 +1,9 @@
-import database from "infra/database";
 import orchestrator from "test/orchestrator";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
-  await cleanDatabase();
+  await orchestrator.cleanDatabase();
 });
-
-async function cleanDatabase() {
-  await database.query("drop schema public cascade; create schema public;");
-}
 
 describe("GET /api/v1/migrations", () => {
   describe("Anonymous user", () => {
