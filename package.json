@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run services:up && npm run services:wait:database && npm run migration:up && next dev",
+    "dev": "npm run services:up && npm run services:wait:database && npm run migrations:up && next dev",
     "test": "npm run services:up && concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand --verbose\"",
     "posttest": "npm run services:stop",
     "test:watch": "jest --watchAll --runInBand --verbose",
@@ -12,8 +12,8 @@
     "services:stop": "docker compose -f infra/compose.yaml stop",
     "services:down": "docker compose -f infra/compose.yaml down",
     "services:wait:database": "node infra/scripts/wait-for-postgres.js",
-    "migration:create": "node-pg-migrate -m infra/migrations create",
-    "migration:up": "node-pg-migrate -m infra/migrations --envPath  .env.development up",
+    "migrations:create": "node-pg-migrate -m infra/migrations create",
+    "migrations:up": "node-pg-migrate -m infra/migrations --envPath  .env.development up",
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
     "lint:eslint:check": "eslint .",
@@ -34,7 +34,8 @@
     "pg": "8.20.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "swr": "2.3.0"
+    "swr": "2.3.0",
+    "uuid": "11.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "20.5.0",
