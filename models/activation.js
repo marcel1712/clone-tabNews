@@ -2,6 +2,7 @@ import database from "infra/database";
 import email from "infra/email";
 import { NotFoundError } from "infra/errors";
 import webserver from "infra/webserver";
+import user from "models/user.js";
 
 const EXPIRATION_IN_MILLISECONDS = 60 * 15 * 1000;
 
@@ -41,6 +42,7 @@ Atenciosamente,
 Equipe Feldup`,
   });
 }
+
 async function findOneValidById(tokenId) {
   const activationTokenObject = await runSelectQuery(tokenId);
 
@@ -72,10 +74,42 @@ async function findOneValidById(tokenId) {
     return results.rows[0];
   }
 }
+
+async function markTokenAsUsed(tokenId) {
+  const usedActivationToken = await runSelectQuery(tokenId);
+
+  return usedActivationToken;
+
+  async function runSelectQuery(tokenId) {
+    const results = await database.query({
+      text: `
+        UPDATE
+          user_activation_tokens
+        SET
+          used_at = timezone('utc', now()),
+          updated_at = timezone('utc', now())
+        WHERE
+          id = $1
+        RETURNING
+          *
+      `,
+      values: [tokenId],
+    });
+
+    return results.rows[0];
+  }
+}
+
+async function activateUserByUserId(userId) {
+  const activatedUser = await user.setFeatures(userId, ["create:session"]);
+  return activatedUser;
+}
 const activation = {
   create,
   sendEmailToUser,
   findOneValidById,
+  markTokenAsUsed,
+  activateUserByUserId,
 };
 
 export default activation;
