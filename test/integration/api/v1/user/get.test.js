@@ -129,9 +129,7 @@ describe("GET /api/v1/user", () => {
 
   describe("Anonymous user", () => {
     test("With valid session", async () => {
-
-      const response = await fetch("http://localhost:3000/api/v1/user", {
-      });
+      const response = await fetch("http://localhost:3000/api/v1/user", {});
 
       expect(response.status).toBe(403);
 
@@ -143,7 +141,6 @@ describe("GET /api/v1/user", () => {
         action: `Verifique se o seu usuario possui a feature "read:session"`,
         status_code: 403,
       });
-
     });
   });
 });

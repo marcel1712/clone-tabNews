@@ -83,8 +83,8 @@ describe("POST /api/v1/migrations", () => {
           {
             method: "POST",
             headers: {
-              Cookie: `session_id=${privilegedUserSession.token}`
-            }
+              Cookie: `session_id=${privilegedUserSession.token}`,
+            },
           },
         );
 
