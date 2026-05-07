@@ -33,7 +33,13 @@ async function postHandler(request, response) {
 
   controller.setSessionCookie(newSession.token, response);
 
-  return response.status(201).json(newSession);
+  const secureOutputValues = authorization.filterOutput(
+    authenticatedUser,
+    "read:session",
+    newSession,
+  );
+
+  return response.status(201).json(secureOutputValues);
 }
 
 async function deleteHandler(request, response) {
