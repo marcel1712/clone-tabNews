@@ -54,7 +54,7 @@
     "prettier": "3.8.1",
     "set-cookie-parser": "2.7.1"
   },
-"config": {
+  "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
