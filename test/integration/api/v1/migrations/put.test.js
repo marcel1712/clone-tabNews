@@ -1,3 +1,4 @@
+import webserver from "infra/webserver.js";
 import orchestrator from "test/orchestrator";
 
 beforeAll(async () => {
@@ -10,7 +11,7 @@ describe("PUT /api/v1/migrations", () => {
     describe("Rerunning pending migrations", () => {
       test("For the first time", async () => {
         const response1 = await fetch(
-          "http://localhost:3000/api/v1/migrations",
+          `${webserver.origin}/api/v1/migrations`,
           {
             method: "PUT",
           },
@@ -29,7 +30,7 @@ describe("PUT /api/v1/migrations", () => {
 
       test("For the second time", async () => {
         const response2 = await fetch(
-          "http://localhost:3000/api/v1/migrations",
+          `${webserver.origin}/api/v1/migrations`,
           {
             method: "PUT",
           },

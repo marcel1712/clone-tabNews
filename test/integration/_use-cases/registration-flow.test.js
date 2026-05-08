@@ -1,4 +1,4 @@
-import webserver from "infra/webserver";
+import webserver from "infra/webserver.js";
 import activation from "models/activation";
 import orchestrator from "test/orchestrator.js";
 import user from "models/user";
@@ -17,7 +17,7 @@ describe("Use case: Registration Flow (all successful)", () => {
 
   test("Create user account", async () => {
     const createUserResponse = await fetch(
-      "http://localhost:3000/api/v1/users",
+      `${webserver.origin}/api/v1/users`,
       {
         method: "POST",
         headers: {

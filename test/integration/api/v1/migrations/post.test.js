@@ -1,3 +1,4 @@
+import webserver from "infra/webserver.js";
 import orchestrator from "test/orchestrator";
 
 beforeAll(async () => {
@@ -11,7 +12,7 @@ describe("POST /api/v1/migrations", () => {
     describe("Running pending migrations", () => {
       test("For the first time", async () => {
         const response = await fetch(
-          "http://localhost:3000/api/v1/migrations",
+          `${webserver.origin}/api/v1/migrations`,
           {
             method: "POST",
           },
@@ -39,7 +40,7 @@ describe("POST /api/v1/migrations", () => {
         const activatedUser = await orchestrator.activateUser(createdUser);
         const sessionToken = await orchestrator.createSession(activatedUser.id);
         const response = await fetch(
-          "http://localhost:3000/api/v1/migrations",
+          `${webserver.origin}/api/v1/migrations`,
           {
             method: "POST",
             headers: {
@@ -79,7 +80,7 @@ describe("POST /api/v1/migrations", () => {
         );
 
         const response = await fetch(
-          "http://localhost:3000/api/v1/migrations",
+          `${webserver.origin}/api/v1/migrations`,
           {
             method: "POST",
             headers: {

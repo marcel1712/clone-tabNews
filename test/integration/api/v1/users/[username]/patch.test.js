@@ -2,6 +2,7 @@ import { version as uuidVersion } from "uuid";
 import orchestrator from "test/orchestrator";
 import password from "models/password";
 import user from "models/user";
+import webserver from "infra/webserver.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -46,7 +47,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       const sessionObject = await orchestrator.createSession(activatedUser.id);
 
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/UsuarioInexistente",
+        `${webserver.origin}/api/v1/users/UsuarioInexistente`,
         {
           method: "PATCH",
           headers: {
@@ -81,7 +82,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         activatedUser2.id,
       );
 
-      const response = await fetch("http://localhost:3000/api/v1/users/user2", {
+      const response = await fetch(`${webserver.origin}/api/v1/users/user2`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",
@@ -117,7 +118,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         activatedUserB.id,
       );
 
-      const response = await fetch("http://localhost:3000/api/v1/users/userA", {
+      const response = await fetch(`${webserver.origin}/api/v1/users/userA`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",
