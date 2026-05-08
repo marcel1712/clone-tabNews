@@ -1,24 +1,58 @@
 import controller from "infra/controller.js";
 import migrator from "../../../../models/migrator.js";
 import { createRouter } from "next-connect";
+import authorization from "models/authorization.js";
+import { ForbiddenError } from "infra/errors.js";
 
 const router = createRouter();
 
-router.get(getHandler);
-router.post(postHandler);
+router.use(controller.injectAnonymousOrUser);
+router.get(controller.canRequest("read:migration"), getHandler);
+router.post(controller.canRequest("create:migration"), postHandler);
 
 export default router.handler(controller.errorHandlers);
 
 async function getHandler(request, response) {
+  const userTryingToGet = request.context.user;
+
+  if (!authorization.can(userTryingToGet, "read:migration")) {
+    throw new ForbiddenError({
+      message: "Voce nao possui permissao para ver as migrations",
+      action: "Verifique se voce possui a feature necessaria para a acao",
+    });
+  }
+
   const pendingMigrations = await migrator.listPendingMigrations();
-  return response.status(200).json(pendingMigrations);
+
+  const secureOutputValues = authorization.filterOutput(
+    userTryingToGet,
+    "read:migration",
+    pendingMigrations,
+  );
+
+  return response.status(200).json(secureOutputValues);
 }
 
 async function postHandler(request, response) {
+  const userTryingToPost = request.context.user;
+
+  if (!authorization.can(userTryingToPost, "create:migration")) {
+    throw new ForbiddenError({
+      message: "Voce nao possui permissao para criar as migrations",
+      action: "Verifique se voce possui a feature necessaria para a acao",
+    });
+  }
+
   const migratedMigrations = await migrator.runPendingMigrations();
 
+  const secureOutputValues = authorization.filterOutput(
+    userTryingToPost,
+    "create:migration",
+    migratedMigrations,
+  );
+
   if (migratedMigrations.length > 0) {
-    return response.status(201).json(migratedMigrations);
+    return response.status(201).json(secureOutputValues);
   }
-  return response.status(200).json(migratedMigrations);
+  return response.status(200).json(secureOutputValues);
 }
