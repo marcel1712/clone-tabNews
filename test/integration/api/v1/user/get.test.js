@@ -2,6 +2,7 @@ import { version as uuidVersion } from "uuid";
 import orchestrator from "test/orchestrator";
 import session from "models/session.js";
 import setCookieParsers from "set-cookie-parser";
+import webserver from "infra/webserver.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -18,9 +19,9 @@ describe("GET /api/v1/user", () => {
 
       const activateUser = await orchestrator.activateUser(createdUser);
 
-      const sessionObject = await orchestrator.createSession(createdUser.id);
+      const sessionObject = await orchestrator.createSession(createdUser);
 
-      const response = await fetch("http://localhost:3000/api/v1/user", {
+      const response = await fetch(`${webserver.origin}/api/v1/user`, {
         headers: {
           Cookie: `session_id=${sessionObject.token}`,
         },
@@ -77,7 +78,7 @@ describe("GET /api/v1/user", () => {
       const nonexistentToken =
         "A5d311dbcb63516b74d773d4f683b16db9278211f61315a60fb063446653e513963992b413db065dc2e337294219d4b8";
 
-      const response = await fetch("http://localhost:3000/api/v1/user", {
+      const response = await fetch(`${webserver.origin}/api/v1/user`, {
         headers: {
           Cookie: `session_id=${nonexistentToken}`,
         },
@@ -104,11 +105,11 @@ describe("GET /api/v1/user", () => {
         username: "UserWithExpiredSession",
       });
 
-      const sessionObject = await orchestrator.createSession(createdUser.id);
+      const sessionObject = await orchestrator.createSession(createdUser);
 
       jest.useRealTimers();
 
-      const response = await fetch("http://localhost:3000/api/v1/user", {
+      const response = await fetch(`${webserver.origin}/api/v1/user`, {
         headers: {
           Cookie: `session_id=${sessionObject.token}`,
         },
@@ -129,7 +130,7 @@ describe("GET /api/v1/user", () => {
 
   describe("Anonymous user", () => {
     test("With valid session", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/user", {});
+      const response = await fetch(`${webserver.origin}/api/v1/user`, {});
 
       expect(response.status).toBe(403);
 

@@ -1,4 +1,4 @@
-import webserver from "infra/webserver";
+import webserver from "infra/webserver.js";
 import activation from "models/activation";
 import orchestrator from "test/orchestrator.js";
 import user from "models/user";
@@ -16,20 +16,17 @@ describe("Use case: Registration Flow (all successful)", () => {
   let createSessionsResponseBody;
 
   test("Create user account", async () => {
-    const createUserResponse = await fetch(
-      "http://localhost:3000/api/v1/users",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "RegistrationFlow",
-          email: "registration.flow@feldup.com.br",
-          password: "registrationFlowPassword",
-        }),
+    const createUserResponse = await fetch(`${webserver.origin}/api/v1/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        username: "RegistrationFlow",
+        email: "registration.flow@feldup.com.br",
+        password: "registrationFlowPassword",
+      }),
+    });
 
     createUserResponseBody = await createUserResponse.json();
 
