@@ -3,8 +3,6 @@ import webserver from "infra/webserver.js";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
-  await orchestrator.waitForAllServices();
-  await orchestrator.runPendingMigrations();
 });
 
 describe("GET /api/v1/status", () => {
