@@ -4,13 +4,12 @@ import { createRouter } from "next-connect";
 import authorization from "models/authorization.js";
 import { ForbiddenError } from "infra/errors.js";
 
-const router = createRouter();
+export default createRouter()
+  .use(controller.injectAnonymousOrUser)
+  .get(controller.canRequest("read:migration"), getHandler)
+  .post(controller.canRequest("create:migration"), postHandler)
+  .handler(controller.errorHandlers);
 
-router.use(controller.injectAnonymousOrUser);
-router.get(controller.canRequest("read:migration"), getHandler);
-router.post(controller.canRequest("create:migration"), postHandler);
-
-export default router.handler(controller.errorHandlers);
 
 async function getHandler(request, response) {
   const userTryingToGet = request.context.user;
