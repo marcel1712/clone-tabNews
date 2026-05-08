@@ -49,4 +49,5 @@ async function getHandler(request, response) {
   );
 
   response.status(200).json(secureOutputValues);
+  return secureOutputValues;
 }
