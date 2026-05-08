@@ -10,7 +10,6 @@ export default createRouter()
   .post(controller.canRequest("create:migration"), postHandler)
   .handler(controller.errorHandlers);
 
-
 async function getHandler(request, response) {
   const userTryingToGet = request.context.user;
 

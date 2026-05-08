@@ -8,7 +8,6 @@ export default createRouter()
   .get(getHandler)
   .handler(controller.errorHandlers);
 
-
 async function getHandler(request, response) {
   const userTryingToGet = request.context.user;
   const updatedAt = new Date().toISOString();

@@ -6,7 +6,6 @@ import session from "models/session.js";
 
 import { ForbiddenError } from "infra/errors.js";
 
-
 export default createRouter()
   .use(controller.injectAnonymousOrUser)
   .post(controller.canRequest("create:session"), postHandler)

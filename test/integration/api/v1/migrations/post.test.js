@@ -11,12 +11,9 @@ describe("POST /api/v1/migrations", () => {
   describe("Anonymous user", () => {
     describe("Running pending migrations", () => {
       test("For the first time", async () => {
-        const response = await fetch(
-          `${webserver.origin}/api/v1/migrations`,
-          {
-            method: "POST",
-          },
-        );
+        const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
+          method: "POST",
+        });
 
         expect(response.status).toBe(403);
 
@@ -39,15 +36,12 @@ describe("POST /api/v1/migrations", () => {
         const createdUser = await orchestrator.createUser();
         const activatedUser = await orchestrator.activateUser(createdUser);
         const sessionToken = await orchestrator.createSession(activatedUser);
-        const response = await fetch(
-          `${webserver.origin}/api/v1/migrations`,
-          {
-            method: "POST",
-            headers: {
-              Cookie: `session_id:${sessionToken.id}`,
-            },
+        const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
+          method: "POST",
+          headers: {
+            Cookie: `session_id:${sessionToken.id}`,
           },
-        );
+        });
 
         const responseBody = await response.json();
 
@@ -79,15 +73,12 @@ describe("POST /api/v1/migrations", () => {
           activatedPrivilegedUser,
         );
 
-        const response = await fetch(
-          `${webserver.origin}/api/v1/migrations`,
-          {
-            method: "POST",
-            headers: {
-              Cookie: `session_id=${privilegedUserSession.token}`,
-            },
+        const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
+          method: "POST",
+          headers: {
+            Cookie: `session_id=${privilegedUserSession.token}`,
           },
-        );
+        });
 
         expect(response.status).toBe(200);
 

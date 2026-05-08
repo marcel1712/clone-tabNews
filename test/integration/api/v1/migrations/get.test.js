@@ -29,14 +29,11 @@ describe("GET /api/v1/migrations", () => {
         await orchestrator.activateUser(createdUser);
         const sessionObject = await orchestrator.createSession(createdUser);
 
-        const response = await fetch(
-          `${webserver.origin}/api/v1/migrations`,
-          {
-            headers: {
-              Cookie: `session_id=${sessionObject.token}`,
-            },
+        const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
+          headers: {
+            Cookie: `session_id=${sessionObject.token}`,
           },
-        );
+        });
         expect(response.status).toBe(403);
 
         const responseBody = await response.json();
@@ -64,14 +61,11 @@ describe("GET /api/v1/migrations", () => {
           activatedPrivilegedUser,
         );
 
-        const response = await fetch(
-          `${webserver.origin}/api/v1/migrations`,
-          {
-            headers: {
-              Cookie: `session_id=${privilegedUserSession.token}`,
-            },
+        const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
+          headers: {
+            Cookie: `session_id=${privilegedUserSession.token}`,
           },
-        );
+        });
         expect(response.status).toBe(200);
 
         const responseBody = await response.json();
